@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+
+/ebpf-tcp-send-recv.iml
+/inspectionProfiles/profiles_settings.xml
+/modules.xml
+/vcs.xml
+/misc.xml
