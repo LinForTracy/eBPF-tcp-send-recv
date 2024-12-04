@@ -1,6 +1,6 @@
 # eBPF TCP Packet Size Monitoring
 
-This eBPF program monitors and observes the TCP send/receive data packet sizes for a specific process identified by its PID. The program uses Python 3 and BCC (BPF Compiler Collection) to achieve this. The usage involves executing the program using `sudo` with a specified PID.
+This eBPF program monitors and observes the TCP send/receive data packet sizes for a specific process identified by its PID. 
 
 ## Requirements
 
