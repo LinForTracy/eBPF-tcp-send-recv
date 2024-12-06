@@ -15,7 +15,7 @@ This eBPF program monitors and observes the TCP send/receive data packet sizes f
 You can install Python 3 using your package manager. For example, on CentOS:
 
 ```sh
-sudo yum install python3
+yum install python3
 ```
 
 ### Installing BCC
@@ -24,10 +24,23 @@ To install BCC, you need to add the EPEL repository and then install it. Here is
 
 ```sh
 # Add EPEL repository
-sudo yum install epel-release
+yum install epel-release
 
 # Install BCC and its Python bindings
 sudo yum install bcc bcc-tools python3-bcc
+```
+
+OR 
+
+```sh
+git clone https://github.com/iovisor/bcc.git
+cd bcc
+git checkout tags/v0.32.0
+
+mkdir build; cd build
+cmake3 .. -DPYTHON_CMD=python3 -DCMAKE_PREFIX_PATH=/usr/lib64/llvm/
+make
+sudo make install
 ```
 
 ## Usage
