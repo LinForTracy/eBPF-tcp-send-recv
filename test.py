@@ -21,8 +21,8 @@ struct key_t {
 //定义采集的指标存储结构value
 BPF_HASH(net_map, struct key_t, u64);
 
-//获取返回的数据包，hook对返回值进行处理
-int kprobe__tcp_sendmsg(struct pt_regs *ctx) {
+//获取tcp_sendms函数的返回值 所以监听kretprobe类型事件
+int kretprobe__tcp_sendmsg(struct pt_regs *ctx) {
     u32 pid = bpf_get_current_pid_tgid() >> 32;
 
     if (FILTER_PID) return 0;
@@ -90,8 +90,8 @@ if __name__ == "__main__":
     print("BPF initialization success")
 
     # 探测tcp_sendmsg
-    b.attach_kprobe(event="tcp_sendmsg", fn_name="kprobe__tcp_sendmsg")
-    print("Attached kprobe for tcp_sendmsg")
+    b.attach_kretprobe(event="tcp_sendmsg", fn_name="kretprobe__tcp_sendmsg")
+    print("Attached kretprobe for tcp_sendmsg")
 
     # 探测tcp_cleanup_rbuf
     b.attach_kprobe(event="tcp_cleanup_rbuf", fn_name="kprobe__tcp_cleanup_rbuf")
@@ -101,15 +101,23 @@ if __name__ == "__main__":
     # 函数用于运行trace_print
     def print_trace():
         b.trace_print()
-
+        # 创建的线程标志
+        stop_tracing = False
 
     # 创建线程运行trace_print
-    trace_thread = threading.Thread(target=print_trace)
+    def trace_loop():
+        while not stop_tracing:
+            try:
+                b.trace_print()
+            except Exception as e:
+                break
+
+    trace_thread = threading.Thread(target=trace_loop)
     trace_thread.start()
 
     # 主循环读取并打印每秒的值
-    while True:
-        try:
+    try:
+        while True:
             time.sleep(1)
             net_map = b.get_table("net_map")
             for key, value in net_map.items():
@@ -120,8 +128,9 @@ if __name__ == "__main__":
                 formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
 
                 print("pid: {} time: {} type: {} size: {}".format(pid, formatted_time, type, value.value))
-        except KeyboardInterrupt:
-            print("\n主动退出.")
-            break
+    except KeyboardInterrupt:
+        print("\n主动退出.")
+        stop_tracing = True
+        trace_thread.join()
 
     sys.exit(0)

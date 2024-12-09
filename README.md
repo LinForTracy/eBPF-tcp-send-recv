@@ -53,14 +53,12 @@ Attached kprobe for tcp_cleanup_rbuf
 As the process with the specified PID triggers TCP send and receive data packets, the script will output the cumulative packet sizes at one-second intervals as shown below:
 
 ```
-pid: xxx time: 2024-12-04 11:45:18 type: sendMsg size: 109816578048
-pid: xxx time: 2024-12-04 11:45:18 type: recvMsg size: 34
-pid: xxx time: 2024-12-04 11:45:19 type: sendMsg size: 109816578048
-pid: xxx time: 2024-12-04 11:45:19 type: recvMsg size: 34
-pid: xxx time: 2024-12-04 11:45:20 type: sendMsg size: 110061158400
-pid: xxx time: 2024-12-04 11:45:20 type: recvMsg size: 62
-pid: xxx time: 2024-12-04 11:45:21 type: sendMsg size: 110061158400
-pid: xxx time: 2024-12-04 11:45:21 type: recvMsg size: 62
+pid: xxx time: 2024-12-09 14:43:33 type: sendMsg size: 40648
+pid: xxx time: 2024-12-09 14:43:33 type: recvMsg size: 34
+pid: xxx time: 2024-12-09 14:43:41 type: sendMsg size: 40662
+pid: xxx time: 2024-12-09 14:43:41 type: recvMsg size: 62
+pid: xxx time: 2024-12-09 14:43:42 type: sendMsg size: 40676
+pid: xxx time: 2024-12-09 14:43:42 type: recvMsg size: 90
 ```
 
 ## Notes
