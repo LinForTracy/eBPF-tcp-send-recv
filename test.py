@@ -1,6 +1,5 @@
 from bcc import BPF
 import time
-import threading
 
 # eBPF 程序代码
 bpf_source = """
@@ -97,17 +96,6 @@ if __name__ == "__main__":
     b.attach_kprobe(event="tcp_cleanup_rbuf", fn_name="kprobe__tcp_cleanup_rbuf")
     print("Attached kprobe for tcp_cleanup_rbuf")
 
-
-
-    # 函数用于运行trace_print
-    def print_trace():
-        b.trace_print()
-
-
-    # 创建线程运行trace_print
-    trace_thread = threading.Thread(target=print_trace)
-    trace_thread.start()
-
     # 主循环读取并打印每秒的值
     while True:
         try:
@@ -123,7 +111,6 @@ if __name__ == "__main__":
                 print("pid: {} time: {} type: {} size: {}".format(pid, formatted_time, type, value.value))
         except KeyboardInterrupt:
             print("\n主动退出.")
-            trace_thread.join()
             break
 
     sys.exit(0)
