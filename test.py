@@ -98,27 +98,19 @@ if __name__ == "__main__":
     print("Attached kprobe for tcp_cleanup_rbuf")
 
 
+
     # 函数用于运行trace_print
     def print_trace():
         b.trace_print()
-        # 创建的线程标志
-        stop_tracing = False
+
 
     # 创建线程运行trace_print
-    def trace_loop():
-        while not stop_tracing:
-            time.sleep(1)
-            try:
-                b.trace_print()
-            except Exception as e:
-                break
-
-    trace_thread = threading.Thread(target=trace_loop)
+    trace_thread = threading.Thread(target=print_trace)
     trace_thread.start()
 
     # 主循环读取并打印每秒的值
-    try:
-        while True:
+    while True:
+        try:
             time.sleep(1)
             net_map = b.get_table("net_map")
             for key, value in net_map.items():
@@ -129,9 +121,9 @@ if __name__ == "__main__":
                 formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
 
                 print("pid: {} time: {} type: {} size: {}".format(pid, formatted_time, type, value.value))
-    except KeyboardInterrupt:
-        print("\n主动退出.")
-        stop_tracing = True
-        trace_thread.join()
+        except KeyboardInterrupt:
+            print("\n主动退出.")
+            trace_thread.join()
+            break
 
     sys.exit(0)
