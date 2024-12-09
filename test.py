@@ -107,6 +107,7 @@ if __name__ == "__main__":
     # 创建线程运行trace_print
     def trace_loop():
         while not stop_tracing:
+            time.sleep(1)
             try:
                 b.trace_print()
             except Exception as e:
